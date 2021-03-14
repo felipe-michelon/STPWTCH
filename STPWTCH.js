@@ -2,33 +2,12 @@ let minutes = document.getElementById("minutes")
 let seconds = document.getElementById("seconds")
 let milliseconds = document.getElementById("milliseconds")
 
+let elapsedTime = 0
+let startTimestamp
 let interval
 
-function updateBody(milliseconds, seconds, minutes){
-  minutes.innerText = minutes.toString().padStart(2, '0')
-  seconds.innerText = seconds.toString().padStart(2, '0')
-  milliseconds.innerText = milliseconds.toString().substring(0, 2).padStart(2, '0')
-}
-
-function updateTimer () {
-  var currentMilliseconds = new Date().getMilliseconds()
-  var currentMinutes = parseInt(minutes.innerText)
-  var currentSeconds = parseInt(seconds.innerText)
-  var displayedMilliseconds = parseInt(milliseconds.innerText)
-
-  if(currentMilliseconds < displayedMilliseconds) {
-    currentSeconds += 1
-  }
-
-  if(currentSeconds === 60) {
-    currentSeconds = 0
-    currentMinutes += 1
-  }
-
-  updateBody(currentMilliseconds, currentSeconds, currentMinutes)
-}
-
 function startTimer() {
+  startTimestamp = new Date().getTime() - elapsedTime
   interval = setInterval(updateTimer, 10)
 }
 
@@ -38,5 +17,34 @@ function stopTimer() {
 
 function resetTimer() {
   clearInterval(interval)
-  updateBody(0, 0, 0)
+  elapsedTime = 0
+  updateBody({
+    elapsedMinutes: 0,
+    elapsedSeconds: 0,
+    elapsedMilliseconds: 0,
+  })
+}
+
+function updateTimer () {
+  elapsedTime = new Date().getTime() - startTimestamp
+
+  updateBody(calculateElapsedTime(elapsedTime))
+}
+
+function calculateElapsedTime(totalMilliseconds) {
+  let diffInMin = Math.floor(totalMilliseconds / 60000)
+  let diffInSec = Math.floor((totalMilliseconds % 60000) / 1000)
+  let diffInMs = Math.floor((totalMilliseconds % 60000) / 10)
+
+  return {
+    elapsedMinutes: diffInMin,
+    elapsedSeconds: diffInSec,
+    elapsedMilliseconds: diffInMs,
+  }
+}
+
+function updateBody({elapsedMinutes, elapsedSeconds, elapsedMilliseconds}){
+  minutes.innerText = elapsedMinutes.toString().padStart(2, '0')
+  seconds.innerText = elapsedSeconds.toString().padStart(2, '0')
+  milliseconds.innerText = elapsedMilliseconds.toString().slice(-2).padStart(2, '0')
 }
