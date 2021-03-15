@@ -1,6 +1,4 @@
-let minutes = document.getElementById("minutes")
-let seconds = document.getElementById("seconds")
-let milliseconds = document.getElementById("milliseconds")
+let timerElement = document.getElementById("timer")
 
 let elapsedTime = 0
 let startTimestamp
@@ -19,33 +17,23 @@ function stopTimer() {
 function resetTimer() {
   stopTimer()
   elapsedTime = 0
-  updateBody({
-    elapsedMinutes: 0,
-    elapsedSeconds: 0,
-    elapsedMilliseconds: 0,
-  })
+  updateBody()
 }
 
 function updateTimer () {
   elapsedTime = new Date().getTime() - startTimestamp
 
-  updateBody(calculateElapsedTime(elapsedTime))
+  updateBody()
 }
 
-function calculateElapsedTime(totalMilliseconds) {
-  let diffInMin = Math.floor(totalMilliseconds / 60000)
-  let diffInSec = Math.floor((totalMilliseconds % 60000) / 1000)
-  let diffInMs = Math.floor((totalMilliseconds % 60000) / 10)
+function formatToTimer(totalMilliseconds) {
+  let diffInMin = Math.floor(totalMilliseconds / 60000).toString().padStart(2, '0')
+  let diffInSec = Math.floor((totalMilliseconds % 60000) / 1000).toString().padStart(2, '0')
+  let diffInMs = Math.floor((totalMilliseconds % 60000) / 10).toString().slice(-2).padStart(2, '0')
 
-  return {
-    elapsedMinutes: diffInMin,
-    elapsedSeconds: diffInSec,
-    elapsedMilliseconds: diffInMs,
-  }
+  return `${diffInMin}:${diffInSec}.${diffInMs}`
 }
 
-function updateBody({elapsedMinutes, elapsedSeconds, elapsedMilliseconds}){
-  minutes.innerText = elapsedMinutes.toString().padStart(2, '0')
-  seconds.innerText = elapsedSeconds.toString().padStart(2, '0')
-  milliseconds.innerText = elapsedMilliseconds.toString().slice(-2).padStart(2, '0')
+function updateBody(){
+  timerElement.innerText = formatToTimer(elapsedTime)
 }
