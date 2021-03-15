@@ -8,15 +8,16 @@ let interval
 
 function startTimer() {
   startTimestamp = new Date().getTime() - elapsedTime
-  interval = setInterval(updateTimer, 10)
+  interval ||= setInterval(updateTimer, 10)
 }
 
 function stopTimer() {
   clearInterval(interval)
+  interval = null
 }
 
 function resetTimer() {
-  clearInterval(interval)
+  stopTimer()
   elapsedTime = 0
   updateBody({
     elapsedMinutes: 0,
