@@ -1,6 +1,8 @@
 let timerElement = document.getElementById("timer")
+let lapsElement = document.getElementById("laps")
 
 let elapsedTime = 0
+let laps = []
 let startTimestamp
 let interval
 
@@ -17,13 +19,22 @@ function stopTimer() {
 function resetTimer() {
   stopTimer()
   elapsedTime = 0
-  updateBody()
+  laps = []
+  updateTimerElement()
+  updateLapElement()
+}
+
+function addLap() {
+  if (interval) {
+    laps.push(elapsedTime)
+    updateLapElement()
+  }
 }
 
 function updateTimer () {
   elapsedTime = new Date().getTime() - startTimestamp
 
-  updateBody()
+  updateTimerElement()
 }
 
 function formatToTimer(totalMilliseconds) {
@@ -34,6 +45,15 @@ function formatToTimer(totalMilliseconds) {
   return `${diffInMin}:${diffInSec}.${diffInMs}`
 }
 
-function updateBody(){
+function updateTimerElement(){
   timerElement.innerText = formatToTimer(elapsedTime)
+}
+
+function updateLapElement() {
+  lapsElement.innerHTML = null
+  laps.forEach(lap =>  {
+    let el = document.createElement("span")
+    el.innerText = formatToTimer(lap)
+    lapsElement.appendChild(el)
+  })
 }
