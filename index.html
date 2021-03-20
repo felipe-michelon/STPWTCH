@@ -6,6 +6,7 @@
   <meta name="keywords" content="stopwatch, minimal">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="author" content="co-authored by Felipe Michelon, Gabriela Gomes">
+  <link rel="stylesheet" href="STPWTCH.css">
   <title>STPWTCH</title>
 </head>
 <body>
@@ -13,10 +14,9 @@
 
   <span id="timer">00:00.00</span>
 
-  <button onClick="startTimer()">start</button>
-  <button onClick="stopTimer()">stop</button>
-  <button onClick="resetTimer()">reset</button>
-  <button onClick="addLap()">lap</button>
+  <button id="startstop">start</button>
+  <button id="reset">reset</button>
+  <button id="addLap" class="hidden">lap</button>
 
   <div id="laps"></div>
   <script type="text/javascript" src="STPWTCH.js"></script>
