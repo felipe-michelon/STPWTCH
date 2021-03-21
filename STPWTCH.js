@@ -1,8 +1,7 @@
 let timerElement = document.getElementById("timer")
 let lapsElement = document.getElementById("laps")
 let startStopButton = document.getElementById("startstop")
-let resetButton = document.getElementById("reset")
-let addLapButton = document.getElementById("addLap")
+let resetLapButton = document.getElementById("resetlap")
 
 let elapsedTime = 0
 let laps = []
@@ -12,7 +11,6 @@ let interval
 function startTimer() {
   startTimestamp = new Date().getTime() - elapsedTime
   interval ||= setInterval(updateTimer, 10)
-  addLapButton.classList.remove("hidden")
 }
 
 function stopTimer() {
@@ -29,10 +27,8 @@ function resetTimer() {
 }
 
 function addLap() {
-  if (interval) {
-    laps.push(elapsedTime)
-    updateLapElement()
-  }
+  laps.push(elapsedTime)
+  updateLapElement()
 }
 
 function updateTimer () {
@@ -54,35 +50,32 @@ function updateTimerElement(){
 }
 
 function updateLapElement() {
+  lapsElement.innerHTML = null
   if (interval) {
-    lapsElement.innerHTML = null
     laps.forEach(lap =>  {
       let el = document.createElement("span")
       el.innerText = formatToTimer(lap)
       lapsElement.appendChild(el)
     })
-  } else {
-    addLapButton.classList.add("hidden")
-    lapsElement.innerHTML = null
   }
 }
 
 startStopButton.addEventListener("click", function () {
   if (interval) {
     this.innerText = "start"
+    resetLapButton.innerText = "reset"
     stopTimer()
   } else {
     this.innerText = "stop"
+    resetLapButton.innerText = "lap"
     startTimer()
   }
 })
 
-resetButton.addEventListener("click", function () {
+resetLapButton.addEventListener("click", function () {
   if (interval) {
-    startStopButton.innerText = "start"
+    addLap()
+  } else {
+    resetTimer()
   }
-
-  resetTimer()
 })
-
-addLapButton.addEventListener("click", addLap)
