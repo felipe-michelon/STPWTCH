@@ -14,10 +14,10 @@ h1 {
 
 span#timer {
   display: inline-block;
-  font-size: 180px;
+  font-size: 11vw;
   font-weight: 300;
   margin-bottom: 20px;
-  margin-top: 250px;
+  margin-top: 10vw;
 }
 
 button {
